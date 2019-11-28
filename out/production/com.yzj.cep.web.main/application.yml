@@ -1,0 +1,52 @@
+server:
+  port: 8099
+spring:
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          username: root
+          password: idolmysql
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://www.huscky.com:3306/IDOL?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+          druid: #以下均为默认值
+            #验证连接是否有效。此参数必须设置为非空字符串，下面三项设置成true才能生效
+            validationQuery: SELECT 1
+            #指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.
+            testWhileIdle: true
+            #指明是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个
+            testOnBorrow: true
+            #指明是否在归还到池中前进行检验
+        slave:
+          username: root
+          password: 123456
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/test?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+          druid: #以下均为默认值
+            #验证连接是否有效。此参数必须设置为非空字符串，下面三项设置成true才能生效
+            validationQuery: SELECT 1
+            #指明连接是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.
+            testWhileIdle: true
+            #指明是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个
+            testOnBorrow: true
+            #指明是否在归还到池中前进行检验
+
+  redis:
+    host: 127.0.0.1
+    password: yzjcepredis
+    port: 6379
+    jedis:
+      pool:
+        max-active: 100
+
+
+logging:
+  level:
+    com:
+      dy:
+        springboot:
+          server:
+            mapper=debug:

@@ -1,0 +1,6 @@
+rootProject.name = 'cep'
+include 'dao'
+include 'service'
+include 'entity'
+include 'web'
+

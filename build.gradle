@@ -1,0 +1,64 @@
+
+group 'com.yzj.cep'
+version '1.0-SNAPSHOT'
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'groovy'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    idea {
+        module {
+            inheritOutputDirs = true
+        }
+    }
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+    tasks.withType(GroovyCompile) {
+        groovyOptions.encoding = "MacRoman"
+    }
+
+    // java编译的时候缺省状态下会因为中文字符而失败
+    [compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        maven{
+            //更换为阿里的仓库
+            url  'http://maven.aliyun.com/nexus/content/groups/public'
+        }
+        //有些jar包在中央仓库是没有的，需要手动添加上去
+//        flatDir {  dirs 'local_jars' }
+//        mavenCentral()
+    }
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+}
+
+// 所有子项目的通用配置
+subprojects {
+
+    dependencies {
+        // 通用依赖
+        compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.2.1.RELEASE'
+//        compile group: 'org.yaml', name: 'snakeyaml', version: '1.25'
+//        compile group: 'com.alibaba', name: 'fastjson', version: '1.2.58'
+//        compileOnly  group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+        // 测试依赖
+        testCompile(
+                "junit:junit:4.12"
+        )
+    }
+
+    ext {
+        springbootVersion = '2.2.1.RELEASE'
+    }
+
+}
+
+
+

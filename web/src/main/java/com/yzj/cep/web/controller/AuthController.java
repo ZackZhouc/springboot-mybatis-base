@@ -1,22 +1,48 @@
 package com.yzj.cep.web.controller;
 
-import com.yzj.cep.service.redis.RedisTemplateService;
-import com.yzj.cep.web.pojo.vo.ResponseVO;
+import com.yzj.cep.common.pojo.dto.auth.LoginDTO;
+import com.yzj.cep.common.pojo.vo.ResponseVO;
+import com.yzj.cep.service.auth.IAuthService;
+import com.yzj.cep.web.annotation.RequireLogin;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
-    private RedisTemplateService redisTemplateService;
+    private IAuthService authService;
 
-    @RequestMapping("/login")
-    public ResponseVO login() {
-//        String token = JwtUtil.getToken("shipzhou");
-//        redisTemplateService.set("token",ResponseVO.genOkResponse(token));
-        ResponseVO responseVO  = redisTemplateService.get("token",ResponseVO.class);
+    @PostMapping("/login")
+    @ApiOperation(value = "登录测试接口",notes = "获取token 参数中account和mobile至少传一个",httpMethod = "POST")
+    @ApiImplicitParam(dataType = "LoginDTO",name = "loginDTO",value = "登录参数",required = true)
+    public ResponseVO login(@RequestBody LoginDTO loginDTO) {
+        ResponseVO responseVO;
+        try {
+            responseVO  = authService.login(loginDTO);
+        }catch (Exception e) {
+          return ResponseVO.genErrorResponse();
+        }
         return responseVO;
+    }
+
+    @RequestMapping("/resource")
+    @RequireLogin
+    @ApiOperation(value = "获取资源接口",notes = "测试获取资源",httpMethod = "GET")
+    public ResponseVO getResource() {
+        return ResponseVO.genOkResponse("hello");
+    }
+
+    @RequestMapping("/test")
+    @ApiIgnore
+    public ResponseVO test(@RequestParam(required = true) String id) {
+        return ResponseVO.genOkResponse("hello");
     }
 }

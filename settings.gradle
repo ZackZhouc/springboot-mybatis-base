@@ -3,4 +3,5 @@ include 'dao'
 include 'service'
 include 'entity'
 include 'web'
+include 'common'
 

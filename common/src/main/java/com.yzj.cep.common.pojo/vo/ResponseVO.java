@@ -1,6 +1,6 @@
-package com.yzj.cep.web.pojo.vo;
+package com.yzj.cep.common.pojo.vo;
 
-import com.yzj.cep.web.pojo.constant.ResponseEnum;
+import com.yzj.cep.common.pojo.constant.ResponseEnum;
 
 public class ResponseVO {
     private String code;
@@ -42,6 +42,10 @@ public class ResponseVO {
 
     public static ResponseVO genBadRequestResponse() {
         return new ResponseVO(ResponseEnum.BAD_REQUEST);
+    }
+
+    public static ResponseVO genMethodNotAllowedResponse() {
+        return new ResponseVO(ResponseEnum.METHOD_NOT_ALLOWED);
     }
 
     public static ResponseVO genExpireResponse() {

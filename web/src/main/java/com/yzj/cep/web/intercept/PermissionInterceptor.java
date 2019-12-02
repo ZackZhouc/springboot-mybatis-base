@@ -1,16 +1,15 @@
 package com.yzj.cep.web.intercept;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
+import com.yzj.cep.common.pojo.vo.ResponseVO;
 import com.yzj.cep.service.util.JwtUtil;
 import com.yzj.cep.web.annotation.RequireLogin;
 import com.yzj.cep.web.annotation.RequirePemission;
 import com.yzj.cep.web.annotation.RequireRole;
-import com.yzj.cep.web.pojo.vo.ResponseVO;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

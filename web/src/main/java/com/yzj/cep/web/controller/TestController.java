@@ -7,10 +7,12 @@ import com.yzj.cep.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 @RestController
+@ApiIgnore
 public class TestController {
 
     @Autowired

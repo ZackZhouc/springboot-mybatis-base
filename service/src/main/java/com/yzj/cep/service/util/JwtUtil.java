@@ -17,7 +17,7 @@ public class JwtUtil {
 
     public static String getToken(String userName) {
         //过期时间
-        Date expireDate = new Date(System.currentTimeMillis() - TOKEN_EXP);
+        Date expireDate = new Date(System.currentTimeMillis() + TOKEN_EXP);
         Map<String, Object> map = new HashMap<>();
         map.put("alg", "HS256");
         map.put("typ", "JWT");

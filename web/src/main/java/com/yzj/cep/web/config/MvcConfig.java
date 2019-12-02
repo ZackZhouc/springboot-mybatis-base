@@ -22,7 +22,7 @@ public class MvcConfig implements WebMvcConfigurer {
         //添加登录处理拦截器，拦截所有请求，登录请求除外
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(permissionInterceptor());
         //排除配置
-//        interceptorRegistration.excludePathPatterns("/login");
+        interceptorRegistration.excludePathPatterns("/auth/login");
         //配置拦截策略
         interceptorRegistration.addPathPatterns("/**");
     }

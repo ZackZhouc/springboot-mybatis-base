@@ -10,7 +10,7 @@ spring:
         master:
           username: root
           password: idolmysql
-          driver-class-name: com.mysql.jdbc.Driver
+          driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://www.huscky.com:3306/IDOL?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
           druid: #以下均为默认值
             #验证连接是否有效。此参数必须设置为非空字符串，下面三项设置成true才能生效
@@ -23,7 +23,7 @@ spring:
         slave:
           username: root
           password: 123456
-          driver-class-name: com.mysql.jdbc.Driver
+          driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://localhost:3306/test?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
           druid: #以下均为默认值
             #验证连接是否有效。此参数必须设置为非空字符串，下面三项设置成true才能生效
@@ -41,12 +41,12 @@ spring:
     jedis:
       pool:
         max-active: 100
-
-
 logging:
-  level:
-    com:
-      dy:
-        springboot:
-          server:
-            mapper=debug:
+  file:
+    max-size: 20MB
+    max-history: 70
+    path: E:/cep/logs
+
+wx:
+  appid: wxe26d5e3406620589
+  secret: 9c205685b1459df91a0e613b07158b10

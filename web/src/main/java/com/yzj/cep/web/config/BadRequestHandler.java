@@ -25,4 +25,10 @@ public class BadRequestHandler {
         e.printStackTrace();
         return ResponseVO.genBadRequestResponse();
     }
+
+    @ExceptionHandler(org.springframework.web.HttpMediaTypeNotSupportedException.class)
+    public ResponseVO httpMediaTypeNotSupportedException(HttpServletRequest request, Exception e) throws Exception {
+        e.printStackTrace();
+        return ResponseVO.genHttpMediaTypeNotSupportedResponse();
+    }
 }

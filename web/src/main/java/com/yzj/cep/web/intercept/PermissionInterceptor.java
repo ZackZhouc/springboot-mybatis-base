@@ -10,6 +10,7 @@ import com.yzj.cep.service.util.JwtUtil;
 import com.yzj.cep.web.annotation.RequireLogin;
 import com.yzj.cep.web.annotation.RequirePemission;
 import com.yzj.cep.web.annotation.RequireRole;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -17,8 +18,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class PermissionInterceptor extends HandlerInterceptorAdapter {
     private final String AUTH_HEADER = "Authorization";
     private boolean ROLE_REQUIRE;
@@ -29,6 +33,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader(AUTH_HEADER);
         boolean hasAnnotation = handler.getClass().isAssignableFrom(HandlerMethod.class);
+        String uri = request.getRequestURL().toString();
         if (hasAnnotation) {
             RequireLogin requireLogin = ((HandlerMethod) handler).getMethodAnnotation(RequireLogin.class);
             RequirePemission requirePemission = ((HandlerMethod) handler).getMethodAnnotation(RequirePemission.class);
@@ -49,33 +54,47 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
                 try {
                     Map<String, Claim> claims = JwtUtil.verifyToken(token);
                     String id = claims.get("id").asString();
-                    // 仅需要登录 通过
-                    if (requireLogin != null)
-                        return true;
+
+                    // 进入到这一步表示已经登录
 
                     // 不需要权限
-                    if (NONE) 
+                    if (NONE)
                         return true;
 
-                    // 仅需要角色
-                    if (ROLE_REQUIRE) {
-
-                    }
-
+                    // 需要权限 优先级高于角色 如果配置需要权限 先检验权限 低优先级pass掉不检查
                     if (PERMISSION_REQUIRE) {
-
+                        String permissionName = requirePemission.value();
+                        boolean hasPermission = checkHasPermission(permissionName, id);
+                        if (hasPermission)
+                            return true;
+                        log.warn("(logmanage--nopermission)" + id + "进行没有权限的" + uri + "请求---------------------");
+                        printOut(response, JSONObject.toJSONString(ResponseVO.genNoPermissionResponse()));
+                        return false;
                     }
+                    // 需要角色
+                    if (ROLE_REQUIRE) {
+                        String roleName = requireRole.value();
+                        boolean hasRole = checkHasRole(roleName, id);
+                        if (hasRole)
+                            return true;
+                        log.warn("(logmanage--norole)" + id + "进行没有角色权限的" + uri + "请求---------------------");
+                        printOut(response, JSONObject.toJSONString(ResponseVO.genNoPermissionResponse()));
+                        return false;
+                    }
+
 
                 } catch (TokenExpiredException e) {
-                    e.printStackTrace();
+                    log.warn(e.getMessage());
                     printOut(response, JSONObject.toJSONString(ResponseVO.genExpireResponse()));
                     return false;
                 } catch (InvalidClaimException e) {
-                    e.printStackTrace();
+                    log.error("(logmanage--invalidTokenException)非法token-------------------");
+                    log.error(e.getMessage());
                     printOut(response, JSONObject.toJSONString(ResponseVO.genIllegalRequestResponse()));
                     return false;
                 } catch (JWTDecodeException e) {
-                    e.printStackTrace();
+                    log.error("(logmanage--decodeTokenException)非法token-------------------");
+                    log.error(e.getMessage());
                     printOut(response, JSONObject.toJSONString(ResponseVO.genIllegalRequestResponse()));
                     return false;
                 }
@@ -108,5 +127,19 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
         pw.flush();
         pw.println(out);
         pw.close();
+    }
+
+    private boolean checkHasRole(String roleName, String id) {
+        // todo  getRolesById
+        List<String> roles = new ArrayList<>();
+        roles.add("test");
+        return roles.contains(roleName);
+    }
+
+    private boolean checkHasPermission(String roleName, String id) {
+        // todo  getPermissionsById
+        List<String> roles = new ArrayList<>();
+        roles.add("test");
+        return roles.contains(roleName);
     }
 }

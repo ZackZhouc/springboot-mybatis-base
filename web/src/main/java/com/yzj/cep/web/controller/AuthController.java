@@ -4,10 +4,8 @@ import com.yzj.cep.common.pojo.dto.auth.LoginDTO;
 import com.yzj.cep.common.pojo.vo.ResponseVO;
 import com.yzj.cep.service.auth.IAuthService;
 import com.yzj.cep.web.annotation.RequireLogin;
-
+import com.yzj.cep.web.annotation.RequirePemission;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +24,10 @@ public class AuthController {
     public ResponseVO login(@RequestBody LoginDTO loginDTO) {
         ResponseVO responseVO;
         try {
+            System.out.println(loginDTO.toString());
             responseVO  = authService.login(loginDTO);
         }catch (Exception e) {
+            e.printStackTrace();
           return ResponseVO.genErrorResponse();
         }
         return responseVO;
@@ -35,6 +35,7 @@ public class AuthController {
 
     @RequestMapping("/resource")
     @RequireLogin
+    @RequirePemission("admin")
     @ApiOperation(value = "获取资源接口",notes = "测试获取资源",httpMethod = "GET")
     public ResponseVO getResource() {
         return ResponseVO.genOkResponse("hello");

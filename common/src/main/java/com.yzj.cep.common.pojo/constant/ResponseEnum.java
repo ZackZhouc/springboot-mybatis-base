@@ -9,7 +9,9 @@ public enum ResponseEnum {
     METHOD_NOT_ALLOWED("100405","methodNotAllowed","不允许的请求方法"),
     EXPIRE("100406","expire","登录过期"),
     ILLEGAL_REQUEST("100407","illegalRequest","非法token"),
+    MEDIA_TYPE_NOT_SUPPORTED("100415","mediaTypeNotSupported","不支持的媒体类型"),
     ERROR("100500","error","服务器异常");
+
 
     private String code;
     private String status;

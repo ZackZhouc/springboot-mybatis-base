@@ -48,6 +48,14 @@ public class ResponseVO {
         return new ResponseVO(ResponseEnum.METHOD_NOT_ALLOWED);
     }
 
+    public static ResponseVO genHttpMediaTypeNotSupportedResponse() {
+        return new ResponseVO(ResponseEnum.MEDIA_TYPE_NOT_SUPPORTED);
+    }
+
+    public static ResponseVO genNoPermissionResponse() {
+        return new ResponseVO(ResponseEnum.NO_PERMISSION);
+    }
+
     public static ResponseVO genExpireResponse() {
         return new ResponseVO(ResponseEnum.EXPIRE);
     }
